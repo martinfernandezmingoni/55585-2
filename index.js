@@ -11,7 +11,7 @@ class ProductManager {
   
   getProducts(){
     const data = fs.readFileSync(this.path, this.format)
-    return JSON.parse
+    return JSON.parse(data)
   }
   
 
@@ -45,7 +45,7 @@ class ProductManager {
     }
         
     this.products.push(newProduct)
-    fs.writeFileSync(this.path, JSON.stringify(this.products, null, "/t"))
+    fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2))
     
   }
   
@@ -69,8 +69,8 @@ class ProductManager {
         ...updates,
         id: this.products[productIndex].id
       }
-      fs.writeFileSync(this.path, JSON.stringify(this.products, null, "/t"))
-      return this.product[productIndex]
+      fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2))
+      return this.products[productIndex]
     } catch (error){
       console.log('Error', error.message)
       return
@@ -91,3 +91,26 @@ class ProductManager {
 }
 
 const productManager = new ProductManager('./products.json')
+
+console.log('Aca el array al inicio', productManager.getProducts())
+
+productManager.addProduct({
+  title:"producto de prueba",
+  description:"este es un producto de prueba",
+  price:2000,
+  thumbnail:'SIN IMAGEN',
+  code:'abc123',
+  stock:25
+})
+
+console.log('Aca el array luego de agregar un producto', productManager.getProducts())
+
+console.log('Buscando producto por el ID otorgado: ', productManager.getProductByID(1))
+
+productManager.updateProduct(1,{title:"producto actualizado"})
+
+console.log('Mostrando producto modificado: ', productManager.getProducts())
+
+console.log(productManager.deleteProduct(1))
+
+console.log( 'se borraron ?', productManager.getProducts())
